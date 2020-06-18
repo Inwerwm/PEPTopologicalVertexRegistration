@@ -1,0 +1,2 @@
+# PEPTopologicalVertexRegistration
+頂点を面の構成から位置を同定し位置合わせするPMXEditorプラグイン
