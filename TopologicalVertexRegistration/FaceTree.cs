@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace TopologicalVertexRegistration
 {
@@ -12,6 +13,7 @@ namespace TopologicalVertexRegistration
         public FaceNode Root { get; private set; }
         public ReadOnlyCollection<FaceNode> FaceNodes { get; }
         private List<FaceNode> UnalignedNodes { get; }
+        public int Surplus { get => UnalignedNodes.Count; }
 
         public FaceTree(IEnumerable<IPXFace> faces, IPXFace root)
         {
@@ -21,28 +23,34 @@ namespace TopologicalVertexRegistration
             UnalignedNodes = faces.Select(f => new FaceNode(f)).ToList();
             FaceNodes = new ReadOnlyCollection<FaceNode>(UnalignedNodes);
             Root = new FaceNode(root);
+
+            SetNeighborRecurcive(Root, null);
         }
 
-        private void SetNeighborRecurcive(FaceNode node)
+        private void SetNeighborRecurcive(FaceNode node, FaceNode parent)
         {
+            node.Parent = parent;
+            foreach (var e in node.Edges)
+            {
+                node.Neighbor.AddRange(FaceNodes.Where(n => n.Edges.Contains(e)));
+            }
+            UnalignedNodes.Remove(node);
+            node.Flag = true;
 
-
+            if (!node.Neighbor.Any(n => n.Flag == false))
+                return;
+            foreach (var n in node.Neighbor)
+            {
+                if (!n.Flag)
+                    SetNeighborRecurcive(n, node);
+            }
         }
     }
 
     class FaceNode : IEquatable<FaceNode>
     {
-        public IPXFace Face { get; set; }
-        private List<PXEdge> edges;
-        internal List<PXEdge> Edges
-        {
-            get
-            {
-                if (edges == null)
-                    edges = PXEdge.FromFace(Face);
-                return edges;
-            }
-        }
+        public IPXFace Face { get; }
+        public ReadOnlyCollection<PXEdge> Edges { get; }
         public bool Flag { get; set; } = false;
         public bool IsBorder { get => Neighbor.Any(n => n == null); }
 
@@ -52,6 +60,7 @@ namespace TopologicalVertexRegistration
         public FaceNode(IPXFace face)
         {
             Face = face;
+            Edges = new ReadOnlyCollection<PXEdge>(PXEdge.FromFace(Face));
         }
 
 

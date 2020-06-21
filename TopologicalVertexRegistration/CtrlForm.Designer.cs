@@ -31,18 +31,20 @@
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.labelTitle = new System.Windows.Forms.Label();
             this.labelSource = new System.Windows.Forms.Label();
-            this.buttonGetSourceFace = new System.Windows.Forms.Button();
-            this.textBoxSourceFaceNum = new System.Windows.Forms.TextBox();
-            this.buttonGetSourceCorFace = new System.Windows.Forms.Button();
-            this.textBoxSourceCorFaceID = new System.Windows.Forms.TextBox();
             this.labelTarget = new System.Windows.Forms.Label();
-            this.buttonGetTargetFace = new System.Windows.Forms.Button();
+            this.textBoxSourceFaceNum = new System.Windows.Forms.TextBox();
             this.textBoxTargetFaceNum = new System.Windows.Forms.TextBox();
+            this.buttonGetTargetFace = new System.Windows.Forms.Button();
+            this.buttonGetSourceFace = new System.Windows.Forms.Button();
+            this.buttonGetSourceCorFace = new System.Windows.Forms.Button();
             this.buttonGetTargetCorFace = new System.Windows.Forms.Button();
+            this.textBoxSourceCorFaceID = new System.Windows.Forms.TextBox();
             this.textBoxTargetCorFaceID = new System.Windows.Forms.TextBox();
             this.labelGetFace = new System.Windows.Forms.Label();
             this.labelGetCorFace = new System.Windows.Forms.Label();
             this.buttonRun = new System.Windows.Forms.Button();
+            this.buttonTest = new System.Windows.Forms.Button();
+            this.comboBoxTest = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanelMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,10 +70,12 @@
             this.tableLayoutPanelMain.Controls.Add(this.labelGetFace, 0, 2);
             this.tableLayoutPanelMain.Controls.Add(this.labelGetCorFace, 0, 5);
             this.tableLayoutPanelMain.Controls.Add(this.buttonRun, 0, 9);
+            this.tableLayoutPanelMain.Controls.Add(this.buttonTest, 0, 10);
+            this.tableLayoutPanelMain.Controls.Add(this.comboBoxTest, 1, 10);
             this.tableLayoutPanelMain.Location = new System.Drawing.Point(16, 20);
             this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
-            this.tableLayoutPanelMain.RowCount = 10;
+            this.tableLayoutPanelMain.RowCount = 11;
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
@@ -82,7 +86,8 @@
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(380, 402);
+            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(380, 578);
             this.tableLayoutPanelMain.TabIndex = 0;
             this.tableLayoutPanelMain.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.tableLayoutPanelMain_CellPaint);
             // 
@@ -116,56 +121,6 @@
             this.labelSource.Text = "起源面";
             this.labelSource.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // buttonGetSourceFace
-            // 
-            this.buttonGetSourceFace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGetSourceFace.Location = new System.Drawing.Point(3, 143);
-            this.buttonGetSourceFace.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.buttonGetSourceFace.Name = "buttonGetSourceFace";
-            this.buttonGetSourceFace.Size = new System.Drawing.Size(184, 27);
-            this.buttonGetSourceFace.TabIndex = 2;
-            this.buttonGetSourceFace.Text = "選択面を取得";
-            this.buttonGetSourceFace.UseVisualStyleBackColor = true;
-            this.buttonGetSourceFace.Click += new System.EventHandler(this.buttonGetSourceFace_Click);
-            // 
-            // textBoxSourceFaceNum
-            // 
-            this.textBoxSourceFaceNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSourceFaceNum.Location = new System.Drawing.Point(3, 178);
-            this.textBoxSourceFaceNum.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBoxSourceFaceNum.Name = "textBoxSourceFaceNum";
-            this.textBoxSourceFaceNum.ReadOnly = true;
-            this.textBoxSourceFaceNum.Size = new System.Drawing.Size(184, 27);
-            this.textBoxSourceFaceNum.TabIndex = 3;
-            this.textBoxSourceFaceNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // buttonGetSourceCorFace
-            // 
-            this.buttonGetSourceCorFace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGetSourceCorFace.Location = new System.Drawing.Point(3, 283);
-            this.buttonGetSourceCorFace.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.buttonGetSourceCorFace.Name = "buttonGetSourceCorFace";
-            this.buttonGetSourceCorFace.Size = new System.Drawing.Size(184, 27);
-            this.buttonGetSourceCorFace.TabIndex = 2;
-            this.buttonGetSourceCorFace.Text = "対応面を取得";
-            this.buttonGetSourceCorFace.UseVisualStyleBackColor = true;
-            this.buttonGetSourceCorFace.Click += new System.EventHandler(this.buttonGetSourceCorFace_Click);
-            // 
-            // textBoxSourceCorFaceID
-            // 
-            this.textBoxSourceCorFaceID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSourceCorFaceID.Location = new System.Drawing.Point(3, 318);
-            this.textBoxSourceCorFaceID.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBoxSourceCorFaceID.Name = "textBoxSourceCorFaceID";
-            this.textBoxSourceCorFaceID.ReadOnly = true;
-            this.textBoxSourceCorFaceID.Size = new System.Drawing.Size(184, 27);
-            this.textBoxSourceCorFaceID.TabIndex = 3;
-            this.textBoxSourceCorFaceID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // labelTarget
             // 
             this.labelTarget.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -181,6 +136,28 @@
             this.labelTarget.Text = "対象面";
             this.labelTarget.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // textBoxSourceFaceNum
+            // 
+            this.textBoxSourceFaceNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSourceFaceNum.Location = new System.Drawing.Point(3, 178);
+            this.textBoxSourceFaceNum.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxSourceFaceNum.Name = "textBoxSourceFaceNum";
+            this.textBoxSourceFaceNum.ReadOnly = true;
+            this.textBoxSourceFaceNum.Size = new System.Drawing.Size(184, 27);
+            this.textBoxSourceFaceNum.TabIndex = 3;
+            this.textBoxSourceFaceNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxTargetFaceNum
+            // 
+            this.textBoxTargetFaceNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTargetFaceNum.Location = new System.Drawing.Point(193, 178);
+            this.textBoxTargetFaceNum.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxTargetFaceNum.Name = "textBoxTargetFaceNum";
+            this.textBoxTargetFaceNum.ReadOnly = true;
+            this.textBoxTargetFaceNum.Size = new System.Drawing.Size(184, 27);
+            this.textBoxTargetFaceNum.TabIndex = 3;
+            this.textBoxTargetFaceNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // buttonGetTargetFace
             // 
             this.buttonGetTargetFace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -195,16 +172,33 @@
             this.buttonGetTargetFace.UseVisualStyleBackColor = true;
             this.buttonGetTargetFace.Click += new System.EventHandler(this.buttonGetTargetFace_Click);
             // 
-            // textBoxTargetFaceNum
+            // buttonGetSourceFace
             // 
-            this.textBoxTargetFaceNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTargetFaceNum.Location = new System.Drawing.Point(193, 178);
-            this.textBoxTargetFaceNum.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBoxTargetFaceNum.Name = "textBoxTargetFaceNum";
-            this.textBoxTargetFaceNum.ReadOnly = true;
-            this.textBoxTargetFaceNum.Size = new System.Drawing.Size(184, 27);
-            this.textBoxTargetFaceNum.TabIndex = 3;
-            this.textBoxTargetFaceNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.buttonGetSourceFace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonGetSourceFace.Location = new System.Drawing.Point(3, 143);
+            this.buttonGetSourceFace.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.buttonGetSourceFace.Name = "buttonGetSourceFace";
+            this.buttonGetSourceFace.Size = new System.Drawing.Size(184, 27);
+            this.buttonGetSourceFace.TabIndex = 2;
+            this.buttonGetSourceFace.Text = "選択面を取得";
+            this.buttonGetSourceFace.UseVisualStyleBackColor = true;
+            this.buttonGetSourceFace.Click += new System.EventHandler(this.buttonGetSourceFace_Click);
+            // 
+            // buttonGetSourceCorFace
+            // 
+            this.buttonGetSourceCorFace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonGetSourceCorFace.Location = new System.Drawing.Point(3, 283);
+            this.buttonGetSourceCorFace.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.buttonGetSourceCorFace.Name = "buttonGetSourceCorFace";
+            this.buttonGetSourceCorFace.Size = new System.Drawing.Size(184, 27);
+            this.buttonGetSourceCorFace.TabIndex = 2;
+            this.buttonGetSourceCorFace.Text = "対応面を取得";
+            this.buttonGetSourceCorFace.UseVisualStyleBackColor = true;
+            this.buttonGetSourceCorFace.Click += new System.EventHandler(this.buttonGetSourceCorFace_Click);
             // 
             // buttonGetTargetCorFace
             // 
@@ -219,6 +213,17 @@
             this.buttonGetTargetCorFace.Text = "対応面を取得";
             this.buttonGetTargetCorFace.UseVisualStyleBackColor = true;
             this.buttonGetTargetCorFace.Click += new System.EventHandler(this.buttonGetTargetCorFace_Click);
+            // 
+            // textBoxSourceCorFaceID
+            // 
+            this.textBoxSourceCorFaceID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSourceCorFaceID.Location = new System.Drawing.Point(3, 318);
+            this.textBoxSourceCorFaceID.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxSourceCorFaceID.Name = "textBoxSourceCorFaceID";
+            this.textBoxSourceCorFaceID.ReadOnly = true;
+            this.textBoxSourceCorFaceID.Size = new System.Drawing.Size(184, 27);
+            this.textBoxSourceCorFaceID.TabIndex = 3;
+            this.textBoxSourceCorFaceID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxTargetCorFaceID
             // 
@@ -266,17 +271,39 @@
             this.buttonRun.Location = new System.Drawing.Point(3, 358);
             this.buttonRun.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonRun.Name = "buttonRun";
-            this.buttonRun.Size = new System.Drawing.Size(374, 40);
+            this.buttonRun.Size = new System.Drawing.Size(374, 27);
             this.buttonRun.TabIndex = 2;
             this.buttonRun.Text = "実行";
             this.buttonRun.UseVisualStyleBackColor = true;
             this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
             // 
+            // buttonTest
+            // 
+            this.buttonTest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonTest.Location = new System.Drawing.Point(3, 392);
+            this.buttonTest.Name = "buttonTest";
+            this.buttonTest.Size = new System.Drawing.Size(184, 183);
+            this.buttonTest.TabIndex = 5;
+            this.buttonTest.Text = "Next";
+            this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
+            // 
+            // comboBoxTest
+            // 
+            this.comboBoxTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxTest.FormattingEnabled = true;
+            this.comboBoxTest.Location = new System.Drawing.Point(193, 473);
+            this.comboBoxTest.Name = "comboBoxTest";
+            this.comboBoxTest.Size = new System.Drawing.Size(184, 28);
+            this.comboBoxTest.TabIndex = 6;
+            // 
             // CtrlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 442);
+            this.ClientSize = new System.Drawing.Size(412, 618);
             this.Controls.Add(this.tableLayoutPanelMain);
             this.Font = new System.Drawing.Font("Yu Gothic UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
@@ -306,5 +333,7 @@
         private System.Windows.Forms.Label labelGetFace;
         private System.Windows.Forms.Label labelGetCorFace;
         private System.Windows.Forms.Button buttonRun;
+        private System.Windows.Forms.Button buttonTest;
+        private System.Windows.Forms.ComboBox comboBoxTest;
     }
 }
