@@ -43,8 +43,6 @@
             this.labelGetFace = new System.Windows.Forms.Label();
             this.labelGetCorFace = new System.Windows.Forms.Label();
             this.buttonRun = new System.Windows.Forms.Button();
-            this.buttonTest = new System.Windows.Forms.Button();
-            this.comboBoxTest = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanelMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,13 +67,11 @@
             this.tableLayoutPanelMain.Controls.Add(this.textBoxTargetCorFaceID, 1, 7);
             this.tableLayoutPanelMain.Controls.Add(this.labelGetFace, 0, 2);
             this.tableLayoutPanelMain.Controls.Add(this.labelGetCorFace, 0, 5);
-            this.tableLayoutPanelMain.Controls.Add(this.buttonRun, 0, 9);
-            this.tableLayoutPanelMain.Controls.Add(this.buttonTest, 0, 10);
-            this.tableLayoutPanelMain.Controls.Add(this.comboBoxTest, 1, 10);
+            this.tableLayoutPanelMain.Controls.Add(this.buttonRun, 0, 8);
             this.tableLayoutPanelMain.Location = new System.Drawing.Point(16, 20);
             this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
-            this.tableLayoutPanelMain.RowCount = 11;
+            this.tableLayoutPanelMain.RowCount = 9;
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
@@ -84,7 +80,6 @@
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelMain.Size = new System.Drawing.Size(380, 578);
@@ -268,36 +263,14 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanelMain.SetColumnSpan(this.buttonRun, 2);
-            this.buttonRun.Location = new System.Drawing.Point(3, 358);
+            this.buttonRun.Location = new System.Drawing.Point(3, 353);
             this.buttonRun.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonRun.Name = "buttonRun";
-            this.buttonRun.Size = new System.Drawing.Size(374, 27);
+            this.buttonRun.Size = new System.Drawing.Size(374, 221);
             this.buttonRun.TabIndex = 2;
             this.buttonRun.Text = "実行";
             this.buttonRun.UseVisualStyleBackColor = true;
             this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
-            // 
-            // buttonTest
-            // 
-            this.buttonTest.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonTest.Location = new System.Drawing.Point(3, 392);
-            this.buttonTest.Name = "buttonTest";
-            this.buttonTest.Size = new System.Drawing.Size(184, 183);
-            this.buttonTest.TabIndex = 5;
-            this.buttonTest.Text = "Next";
-            this.buttonTest.UseVisualStyleBackColor = true;
-            this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
-            // 
-            // comboBoxTest
-            // 
-            this.comboBoxTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxTest.FormattingEnabled = true;
-            this.comboBoxTest.Location = new System.Drawing.Point(193, 473);
-            this.comboBoxTest.Name = "comboBoxTest";
-            this.comboBoxTest.Size = new System.Drawing.Size(184, 28);
-            this.comboBoxTest.TabIndex = 6;
             // 
             // CtrlForm
             // 
@@ -333,7 +306,5 @@
         private System.Windows.Forms.Label labelGetFace;
         private System.Windows.Forms.Label labelGetCorFace;
         private System.Windows.Forms.Button buttonRun;
-        private System.Windows.Forms.Button buttonTest;
-        private System.Windows.Forms.ComboBox comboBoxTest;
     }
 }

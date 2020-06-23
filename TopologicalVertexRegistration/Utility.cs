@@ -3,6 +3,7 @@ using PEPlugin.Pmx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SelectFaceIncludingVertex
 {
@@ -11,6 +12,24 @@ namespace SelectFaceIncludingVertex
     /// </summary>
     static class Utility
     {
+        public static DialogResult ShowException(Exception ex)
+        {
+            // Get reference to the dialog type. 
+            var dialogTypeName = "System.Windows.Forms.PropertyGridInternal.GridErrorDlg";
+            var dialogType = typeof(Form).Assembly.GetType(dialogTypeName);
+
+            // Create dialog instance. 
+            var dialog = (Form)Activator.CreateInstance(dialogType, new PropertyGrid());
+
+            // Populate relevant properties on the dialog instance. 
+            dialog.Text = "例外発生";
+            dialogType.GetProperty("Details").SetValue(dialog, ex.StackTrace, null);
+            dialogType.GetProperty("Message").SetValue(dialog, ex.Message, null);
+
+            // Display dialog. 
+            return dialog.ShowDialog();
+        }
+
         /// <summary>
         /// 入力頂点のボーン・ウェイトをタプルリストに変換する
         /// </summary>

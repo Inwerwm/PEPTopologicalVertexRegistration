@@ -25,6 +25,7 @@ namespace TopologicalVertexRegistration
             Root = new FaceNode(root);
 
             SetNeighborRecurcive(Root, null);
+            FlagReset();
         }
 
         private void SetNeighborRecurcive(FaceNode node, FaceNode parent)
@@ -34,15 +35,29 @@ namespace TopologicalVertexRegistration
             {
                 node.Neighbor.AddRange(FaceNodes.Where(n => n.Edges.Contains(e)));
             }
+            if (node.Neighbor.Count > 3)
+                throw new FaceBrunchException();
             UnalignedNodes.Remove(node);
             node.Flag = true;
 
-            if (!node.Neighbor.Any(n => n.Flag == false))
-                return;
             foreach (var n in node.Neighbor)
             {
                 if (!n.Flag)
                     SetNeighborRecurcive(n, node);
+            }
+        }
+
+        public void FlagReset()
+        {
+            FlagResetRecurcive(Root);
+        }
+
+        private void FlagResetRecurcive(FaceNode node)
+        {
+            node.Flag = false;
+            foreach (var n in node.Neighbor)
+            {
+                FlagResetRecurcive(n);
             }
         }
     }
@@ -95,6 +110,29 @@ namespace TopologicalVertexRegistration
         public override int GetHashCode()
         {
             return (Vertex1.GetHashCode() + Vertex2.GetHashCode()) / 2;
+        }
+    }
+
+    [Serializable()]
+    public class FaceBrunchException : Exception
+    {
+        public FaceBrunchException()
+        {
+        }
+
+        public FaceBrunchException(string message)
+            : base(message)
+        {
+        }
+
+        public FaceBrunchException(string message, Exception inner)
+            : base(message, inner)
+        {
+        }
+
+        protected FaceBrunchException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+        {
         }
     }
 }

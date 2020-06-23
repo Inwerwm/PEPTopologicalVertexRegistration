@@ -16,8 +16,8 @@ namespace TopologicalVertexRegistration
 
         private int[] SourceFaceIndices;
         private int[] TargetFaceIndices;
-        private int SourceCorFaceIndex;
-        private int TargetCorFaceIndex;
+        private int SourceCorFaceIndex = -1;
+        private int TargetCorFaceIndex = -1;
 
         public CtrlForm(IPXCPluginRunArgs args)
         {
@@ -135,36 +135,52 @@ namespace TopologicalVertexRegistration
             textBoxTargetCorFaceID.Text = TargetCorFaceIndex.ToString();
         }
 
-        private FaceTree tree;
-        private FaceNode SelectedNode;
-
         private void buttonRun_Click(object sender, EventArgs e)
         {
+            if(SourceFaceIndices.Length < 1 || TargetFaceIndices.Length < 1)
+            {
+                MessageBox.Show("考慮したい面が選択されていません。");
+                return;
+            }
+            if(SourceCorFaceIndex < 0 || TargetCorFaceIndex < 0)
+            {
+                MessageBox.Show("対応面が選択されていません。");
+                return;
+            }
+
             pmx = PXCBridge.GetCurrentPmx(args.Connector);
+
             try
             {
-                tree = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex));
+                var sourceTree = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex));
+                var targetTree = new FaceTree(TargetFaceIndices.Select(i => GetFace(i)), GetFace(TargetCorFaceIndex));
 
-                args.Connector.SetSelectedFaceIndices(new int[] { GetFaceIndex(tree.Root.Face) });
-                SelectedNode = tree.Root;
-                comboBoxTest.Items.Clear();
-                comboBoxTest.Items.AddRange(Enumerable.Range(1, tree.Root.Neighbor.Count).Select(i => (object)i).ToArray());
+                RecursiveRegistration(sourceTree.Root, targetTree.Root);
+                PXCBridge.UpdatePmx(args.Connector, pmx);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message}{Environment.NewLine}{ex.StackTrace}");
+                Utility.ShowException(ex);
             }
 
         }
 
-        private void buttonTest_Click(object sender, EventArgs e)
+        private void RecursiveRegistration(FaceNode source, FaceNode target)
         {
-            if (comboBoxTest.SelectedIndex < 0)
-                return;
-            SelectedNode = SelectedNode.Neighbor[comboBoxTest.SelectedIndex];
-            args.Connector.SetSelectedFaceIndices(new int[] { GetFaceIndex(SelectedNode.Face) });
-            comboBoxTest.Items.Clear();
-            comboBoxTest.Items.AddRange(Enumerable.Range(1, SelectedNode.Neighbor.Count).Select(i => (object)i).ToArray());
+            source.Face.Vertex1.Position = target.Face.Vertex1.Position;
+            source.Face.Vertex2.Position = target.Face.Vertex2.Position;
+            source.Face.Vertex3.Position = target.Face.Vertex3.Position;
+
+            source.Flag = target.Flag = true;
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (i >= source.Neighbor.Count || i >= target.Neighbor.Count)
+                    break;
+
+                if (!source.Neighbor[i].Flag && !target.Neighbor[i].Flag)
+                    RecursiveRegistration(source.Neighbor[i], target.Neighbor[i]);
+            }
         }
     }
 }
