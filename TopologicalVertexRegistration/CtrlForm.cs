@@ -29,6 +29,16 @@ namespace TopologicalVertexRegistration
             pmx = args.Host.Connector.Pmx.GetCurrentState();
         }
 
+        public int[] GetSelectedFaceIndices()
+        {
+            var selectedFaceIndices = args.Host.Connector.View.PmxView.GetSelectedFaceIndices();
+            foreach (var i in selectedFaceIndices)
+            {
+                MessageBox.Show($"{i}{Environment.NewLine}");
+            }
+            return selectedFaceIndices.Where((id, count) => count % 3 == 0).ToArray();
+        }
+
         private void CtrlForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -36,6 +46,12 @@ namespace TopologicalVertexRegistration
                 e.Cancel = true;
                 Visible = false;
             }
+        }
+
+        private void buttonGetSourceFace_Click(object sender, EventArgs e)
+        {
+            var selectedFaceIndices = args.Host.Connector.View.PmxView.GetSelectedFaceIndices();
+            textBoxSourceFaceNum.Text = selectedFaceIndices.Length.ToString();
         }
     }
 }
