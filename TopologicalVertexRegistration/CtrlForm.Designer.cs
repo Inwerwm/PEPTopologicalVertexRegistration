@@ -182,7 +182,6 @@
             this.buttonGetTargetFace.TabIndex = 2;
             this.buttonGetTargetFace.Text = "選択面を取得";
             this.buttonGetTargetFace.UseVisualStyleBackColor = true;
-            this.buttonGetTargetFace.Click += new System.EventHandler(this.buttonGetTargetFace_Click);
             // 
             // buttonGetSourceFace
             // 
@@ -196,7 +195,6 @@
             this.buttonGetSourceFace.TabIndex = 2;
             this.buttonGetSourceFace.Text = "選択面を取得";
             this.buttonGetSourceFace.UseVisualStyleBackColor = true;
-            this.buttonGetSourceFace.Click += new System.EventHandler(this.buttonGetSourceFace_Click);
             // 
             // buttonGetSourceCorFace
             // 
@@ -210,7 +208,6 @@
             this.buttonGetSourceCorFace.TabIndex = 2;
             this.buttonGetSourceCorFace.Text = "対応面を取得";
             this.buttonGetSourceCorFace.UseVisualStyleBackColor = true;
-            this.buttonGetSourceCorFace.Click += new System.EventHandler(this.buttonGetSourceCorFace_Click);
             // 
             // buttonGetTargetCorFace
             // 
@@ -224,7 +221,6 @@
             this.buttonGetTargetCorFace.TabIndex = 2;
             this.buttonGetTargetCorFace.Text = "対応面を取得";
             this.buttonGetTargetCorFace.UseVisualStyleBackColor = true;
-            this.buttonGetTargetCorFace.Click += new System.EventHandler(this.buttonGetTargetCorFace_Click);
             // 
             // textBoxSourceCorFaceID
             // 
@@ -285,7 +281,6 @@
             this.buttonGetStartSourcePoint.TabIndex = 0;
             this.buttonGetStartSourcePoint.Text = "探索開始辺頂点を取得";
             this.buttonGetStartSourcePoint.UseVisualStyleBackColor = true;
-            this.buttonGetStartSourcePoint.Click += new System.EventHandler(this.buttonGetStartSourcePoint_Click);
             // 
             // textBoxStartSourcePointID1
             // 
@@ -310,7 +305,6 @@
             this.buttonRun.TabIndex = 2;
             this.buttonRun.Text = "実行";
             this.buttonRun.UseVisualStyleBackColor = true;
-            this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
             // 
             // buttonGetStartTargetPoint
             // 
@@ -323,7 +317,6 @@
             this.buttonGetStartTargetPoint.TabIndex = 0;
             this.buttonGetStartTargetPoint.Text = "探索開始辺頂点を取得";
             this.buttonGetStartTargetPoint.UseVisualStyleBackColor = true;
-            this.buttonGetStartTargetPoint.Click += new System.EventHandler(this.buttonGetStartTargetPoint_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -403,7 +396,6 @@
             this.buttonTest.TabIndex = 6;
             this.buttonTest.Text = "テスト";
             this.buttonTest.UseVisualStyleBackColor = true;
-            this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
             // CtrlForm
             // 
