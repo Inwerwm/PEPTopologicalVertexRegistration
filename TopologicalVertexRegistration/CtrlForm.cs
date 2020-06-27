@@ -18,6 +18,10 @@ namespace TopologicalVertexRegistration
         private int[] TargetFaceIndices;
         private int SourceCorFaceIndex = -1;
         private int TargetCorFaceIndex = -1;
+        private int SourceStartEdgeVertex1Index = -1;
+        private int SourceStartEdgeVertex2Index = -1;
+        private int TargetStartEdgeVertex1Index = -1;
+        private int TargetStartEdgeVertex2Index = -1;
 
         public CtrlForm(IPXCPluginRunArgs args)
         {
@@ -81,18 +85,6 @@ namespace TopologicalVertexRegistration
             }
         }
 
-        private void tableLayoutPanelMain_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
-        {
-            if (e.Column == 0)
-                e.Graphics.DrawLine(Pens.Silver, new Point(e.CellBounds.Right, e.CellBounds.Top), new Point(e.CellBounds.Right, e.CellBounds.Bottom));
-
-            if (e.Row == 0)
-            {
-                e.Graphics.DrawLine(Pens.Silver, new Point(e.CellBounds.Left, e.CellBounds.Top), new Point(e.CellBounds.Right, e.CellBounds.Top));
-                e.Graphics.DrawLine(Pens.Silver, new Point(e.CellBounds.Left, e.CellBounds.Bottom), new Point(e.CellBounds.Right, e.CellBounds.Bottom));
-            }
-        }
-
         private void buttonGetSourceFace_Click(object sender, EventArgs e)
         {
             pmx = PXCBridge.GetCurrentPmx(args.Connector);
@@ -137,16 +129,17 @@ namespace TopologicalVertexRegistration
 
         private void buttonRun_Click(object sender, EventArgs e)
         {
-            if(SourceFaceIndices.Length < 1 || TargetFaceIndices.Length < 1)
+            if (SourceFaceIndices.Length < 1 || TargetFaceIndices.Length < 1)
             {
                 MessageBox.Show("考慮したい面が選択されていません。");
                 return;
             }
-            if(SourceCorFaceIndex < 0 || TargetCorFaceIndex < 0)
+            if (SourceCorFaceIndex < 0 || TargetCorFaceIndex < 0)
             {
                 MessageBox.Show("対応面が選択されていません。");
                 return;
             }
+
 
             pmx = PXCBridge.GetCurrentPmx(args.Connector);
 
@@ -155,7 +148,10 @@ namespace TopologicalVertexRegistration
                 var sourceTree = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex));
                 var targetTree = new FaceTree(TargetFaceIndices.Select(i => GetFace(i)), GetFace(TargetCorFaceIndex));
 
-                RecursiveRegistration(sourceTree.Root, targetTree.Root);
+                RecursiveRegistration(
+                    (sourceTree.Root, sourceTree.Root.GetEdge(pmx.Vertex[SourceStartEdgeVertex1Index], pmx.Vertex[SourceStartEdgeVertex2Index])),
+                    (targetTree.Root, targetTree.Root.GetEdge(pmx.Vertex[TargetStartEdgeVertex1Index], pmx.Vertex[TargetStartEdgeVertex2Index]))
+                );
                 PXCBridge.UpdatePmx(args.Connector, pmx);
             }
             catch (Exception ex)
@@ -165,22 +161,70 @@ namespace TopologicalVertexRegistration
 
         }
 
-        private void RecursiveRegistration(FaceNode source, FaceNode target)
+        private void RecursiveRegistration((FaceNode node, PXEdge edge) source, (FaceNode node, PXEdge edge) target)
         {
-            source.Face.Vertex1.Position = target.Face.Vertex1.Position;
-            source.Face.Vertex2.Position = target.Face.Vertex2.Position;
-            source.Face.Vertex3.Position = target.Face.Vertex3.Position;
+            source.edge.Vertex1.Position = target.edge.Vertex1.Position;
+            source.edge.Vertex2.Position = target.edge.Vertex2.Position;
 
-            source.Flag = target.Flag = true;
+            source.edge.Flag = target.edge.Flag = true;
+            if (source.node == null || target.node == null)
+                return;
 
-            for (int i = 0; i < 3; i++)
+            (int source, int target) edgeID = (source.node.Edges.IndexOf(source.edge), target.node.Edges.IndexOf(target.edge));
+            for (int i = 1; i < 3; i++)
             {
-                if (i >= source.Neighbor.Count || i >= target.Neighbor.Count)
-                    break;
-
-                if (!source.Neighbor[i].Flag && !target.Neighbor[i].Flag)
-                    RecursiveRegistration(source.Neighbor[i], target.Neighbor[i]);
+                (PXEdge source, PXEdge target) nextEdge = (source.node.Edges[(edgeID.source + i) % 3], target.node.Edges[(edgeID.target + i) % 3]);
+                if (!nextEdge.source.Flag && !nextEdge.target.Flag)
+                {
+                    (FaceNode source, FaceNode target) nextNode = (nextEdge.source.Nodes.Find(n => n != source.node), nextEdge.target.Nodes.Find(n => n != target.node));
+                    RecursiveRegistration((nextNode.source, nextEdge.source), (nextNode.target, nextEdge.target));
+                }
             }
+        }
+
+        private void buttonGetStartSourcePoint_Click(object sender, EventArgs e)
+        {
+            pmx = PXCBridge.GetCurrentPmx(args.Connector);
+            var selectedVertexIndices = args.Connector.GetSelectedVertexIndices();
+            if (selectedVertexIndices.Length != 2)
+            {
+                MessageBox.Show("辺をなす2点を選択してください");
+                return;
+            }
+
+            SourceStartEdgeVertex1Index = selectedVertexIndices[0];
+            SourceStartEdgeVertex2Index = selectedVertexIndices[1];
+
+            textBoxStartSourcePointID1.Text = SourceStartEdgeVertex1Index.ToString();
+            textBoxStartSourcePointID2.Text = SourceStartEdgeVertex2Index.ToString();
+        }
+
+        private void buttonGetStartTargetPoint_Click(object sender, EventArgs e)
+        {
+            pmx = PXCBridge.GetCurrentPmx(args.Connector);
+            var selectedVertexIndices = args.Connector.GetSelectedVertexIndices();
+            if (selectedVertexIndices.Length != 2)
+            {
+                MessageBox.Show("辺をなす2点を選択してください");
+                return;
+            }
+
+            TargetStartEdgeVertex1Index = selectedVertexIndices[0];
+            TargetStartEdgeVertex2Index = selectedVertexIndices[1];
+
+            textBoxStartTargetPointID1.Text = TargetStartEdgeVertex1Index.ToString();
+            textBoxStartTargetPointID2.Text = TargetStartEdgeVertex2Index.ToString();
+        }
+
+        private void buttonTest_Click(object sender, EventArgs e)
+        {
+            pmx = PXCBridge.GetCurrentPmx(args.Connector);
+
+            var selectedFaceID = args.Connector.GetSelectedFaceIndices();
+            var selectedFaces = selectedFaceID.Select(i => GetFace(i/3));
+
+            PXEdge edge = new PXEdge(pmx.Vertex[TargetStartEdgeVertex1Index], pmx.Vertex[TargetStartEdgeVertex2Index]);
+            MessageBox.Show(selectedFaces.Where(f => PXEdge.FromFace(f).Contains(edge)).Count().ToString());
         }
     }
 }

@@ -33,17 +33,23 @@ namespace TopologicalVertexRegistration
             node.Parent = parent;
             foreach (var e in node.Edges)
             {
-                node.Neighbor.AddRange(FaceNodes.Where(n => n.Edges.Contains(e)));
+                var edgeShareNodes = FaceNodes.Where(n =>n.Edges.Contains(e) && n != node).ToList();
+                if (!edgeShareNodes.Any())
+                {
+                    continue;
+                }
+                node.Neighbor.AddRange(edgeShareNodes);
+                e.Nodes.AddRange(edgeShareNodes);
+                if(e.Nodes.Count>2)
+                    throw new FaceBrunchException();
             }
             if (node.Neighbor.Count > 3)
                 throw new FaceBrunchException();
             UnalignedNodes.Remove(node);
             node.Flag = true;
-
-            foreach (var n in node.Neighbor)
+            foreach (var n in node.Neighbor.Where(n => !n.Flag))
             {
-                if (!n.Flag)
-                    SetNeighborRecurcive(n, node);
+                SetNeighborRecurcive(n, node);
             }
         }
 
@@ -65,7 +71,7 @@ namespace TopologicalVertexRegistration
     class FaceNode : IEquatable<FaceNode>
     {
         public IPXFace Face { get; }
-        public ReadOnlyCollection<PXEdge> Edges { get; }
+        public List<PXEdge> Edges { get; }
         public bool Flag { get; set; } = false;
         public bool IsBorder { get => Neighbor.Any(n => n == null); }
 
@@ -75,7 +81,19 @@ namespace TopologicalVertexRegistration
         public FaceNode(IPXFace face)
         {
             Face = face;
-            Edges = new ReadOnlyCollection<PXEdge>(PXEdge.FromFace(Face));
+            Edges = new List<PXEdge>(PXEdge.FromFace(Face));
+            foreach (PXEdge e in Edges)
+            {
+                e.Nodes.Add(this);
+            }
+        }
+
+        public PXEdge GetEdge(IPXVertex v1,IPXVertex v2)
+        {
+            PXEdge edge = Edges.FindAll(e => e.Vertices.Contains(v1)).Find(e => e.Vertices.Contains(v2));
+            if (edge == null)
+                throw new ArgumentException("この面に指定された頂点を含む辺は存在しません。");
+            return edge;
         }
 
 
@@ -94,6 +112,11 @@ namespace TopologicalVertexRegistration
         public IPXVertex Vertex2 { get; set; }
         public List<IPXVertex> Vertices { get => new List<IPXVertex> { Vertex1, Vertex2 }; }
         public (IPXVertex, IPXVertex) Pair { get => (Vertex1, Vertex2); }
+
+        public List<FaceNode> Nodes { get; } = new List<FaceNode>();
+        public List<IPXFace> Faces { get => Nodes.Select(n => n.Face).ToList(); }
+
+        public bool Flag { get; set; } = false;
 
         public PXEdge(IPXVertex vertex1, IPXVertex vertex2)
         {
