@@ -3,31 +3,83 @@ using PEPlugin.Pmx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
-namespace SelectFaceIncludingVertex
+namespace TopologicalVertexRegistration
 {
     /// <summary>
     /// 便利メソッド集
     /// </summary>
     static class Utility
     {
-        public static DialogResult ShowException(Exception ex)
+        /// <summary>
+        /// モデル・フォーム・ビューを一括更新する
+        /// </summary>
+        /// <param name="connector">ホストへのコネクタ</param>
+        /// <param name="pmx">更新用プラグインPMX</param>
+        /// <param name="option">更新対象</param>
+        /// <param name="index">任意の対象Index</param>
+        public static void Update(IPEConnector connector, IPXPmx pmx, PmxUpdateObject option = PmxUpdateObject.All, int index = -1)
         {
-            // Get reference to the dialog type. 
-            var dialogTypeName = "System.Windows.Forms.PropertyGridInternal.GridErrorDlg";
-            var dialogType = typeof(Form).Assembly.GetType(dialogTypeName);
+            connector.Pmx.Update(pmx, option, index);
+            connector.Form.UpdateList(ConvUObjrct_DtoX(option));
+            connector.View.PmxView.UpdateModel();
+        }
 
-            // Create dialog instance. 
-            var dialog = (Form)Activator.CreateInstance(dialogType, new PropertyGrid());
+        /// <summary>
+        /// PmxUpdateObjectからPmd.UpdateObjectに変換する
+        /// </summary>
+        /// <param name="input">変換するPmxUpdateObject</param>
+        /// <returns></returns>
+        public static PEPlugin.Pmd.UpdateObject ConvUObjrct_DtoX(PmxUpdateObject input)
+        {
+            PEPlugin.Pmd.UpdateObject output;
+            switch (input)
+            {
+                case PmxUpdateObject.None:
+                    output = PEPlugin.Pmd.UpdateObject.None;
+                    break;
+                case PmxUpdateObject.All:
+                    output = PEPlugin.Pmd.UpdateObject.All;
+                    break;
+                case PmxUpdateObject.Header:
+                    output = PEPlugin.Pmd.UpdateObject.Header;
+                    break;
+                case PmxUpdateObject.ModelInfo:
+                    output = PEPlugin.Pmd.UpdateObject.All;
+                    break;
+                case PmxUpdateObject.Vertex:
+                    output = PEPlugin.Pmd.UpdateObject.Vertex;
+                    break;
+                case PmxUpdateObject.Face:
+                    output = PEPlugin.Pmd.UpdateObject.Face;
+                    break;
+                case PmxUpdateObject.Material:
+                    output = PEPlugin.Pmd.UpdateObject.Material;
+                    break;
+                case PmxUpdateObject.Bone:
+                    output = PEPlugin.Pmd.UpdateObject.Bone;
+                    break;
+                case PmxUpdateObject.Morph:
+                    output = PEPlugin.Pmd.UpdateObject.Morph;
+                    break;
+                case PmxUpdateObject.Node:
+                    output = PEPlugin.Pmd.UpdateObject.Node;
+                    break;
+                case PmxUpdateObject.Body:
+                    output = PEPlugin.Pmd.UpdateObject.Body;
+                    break;
+                case PmxUpdateObject.Joint:
+                    output = PEPlugin.Pmd.UpdateObject.Joint;
+                    break;
+                case PmxUpdateObject.SoftBody:
+                    output = PEPlugin.Pmd.UpdateObject.All;
+                    break;
+                default:
+                    output = PEPlugin.Pmd.UpdateObject.All;
+                    break;
+            }
 
-            // Populate relevant properties on the dialog instance. 
-            dialog.Text = "例外発生";
-            dialogType.GetProperty("Details").SetValue(dialog, ex.StackTrace, null);
-            dialogType.GetProperty("Message").SetValue(dialog, ex.Message, null);
-
-            // Display dialog. 
-            return dialog.ShowDialog();
+            return output;
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using PEPlugin.Pmx;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -11,17 +10,15 @@ namespace TopologicalVertexRegistration
     {
         public int Count { get; private set; }
         public FaceNode Root { get; private set; }
-        public ReadOnlyCollection<FaceNode> FaceNodes { get; }
-        private List<FaceNode> UnalignedNodes { get; }
-        public int Surplus { get => UnalignedNodes.Count; }
+        public List<FaceNode> FaceNodes { get; }
+        public int Surplus { get => FaceNodes.Count(n => !n.Flag); }
 
         public FaceTree(IEnumerable<IPXFace> faces, IPXFace root)
         {
             if (!faces.Contains(root))
-                throw new ArgumentException("root面はfacesコンテナ内に存在していなければなりません。");
+                throw new ArgumentException("root面はfaces内に存在していなければなりません。");
 
-            UnalignedNodes = faces.Select(f => new FaceNode(f)).ToList();
-            FaceNodes = new ReadOnlyCollection<FaceNode>(UnalignedNodes);
+            FaceNodes = faces.Select((f, i) => new FaceNode(f, i)).ToList();
             Root = new FaceNode(root);
 
             SetNeighborRecurcive(Root, null);
@@ -33,19 +30,19 @@ namespace TopologicalVertexRegistration
             node.Parent = parent;
             foreach (var e in node.Edges)
             {
-                var edgeShareNodes = FaceNodes.Where(n =>n.Edges.Contains(e) && n != node).ToList();
-                if (!edgeShareNodes.Any())
+                var edgeShareNodes = FaceNodes.Where(n => n.Edges.Contains(e) && n != node).ToList();
+                if (edgeShareNodes.Count < 0)
                 {
                     continue;
                 }
                 node.Neighbor.AddRange(edgeShareNodes);
                 e.Nodes.AddRange(edgeShareNodes);
-                if(e.Nodes.Count>2)
+                if (e.Nodes.Count > 2)
                     throw new FaceBrunchException();
             }
+            node.Neighbor = node.Neighbor.Distinct().ToList();
             if (node.Neighbor.Count > 3)
                 throw new FaceBrunchException();
-            UnalignedNodes.Remove(node);
             node.Flag = true;
             foreach (var n in node.Neighbor.Where(n => !n.Flag))
             {
@@ -76,9 +73,11 @@ namespace TopologicalVertexRegistration
         public bool IsBorder { get => Neighbor.Any(n => n == null); }
 
         public FaceNode Parent { get; set; }
-        public List<FaceNode> Neighbor { get; } = new List<FaceNode>();
+        public List<FaceNode> Neighbor { get; set; } = new List<FaceNode>();
 
-        public FaceNode(IPXFace face)
+        public int ID { get; set; }
+
+        public FaceNode(IPXFace face, int id = -1)
         {
             Face = face;
             Edges = new List<PXEdge>(PXEdge.FromFace(Face));
@@ -86,9 +85,10 @@ namespace TopologicalVertexRegistration
             {
                 e.Nodes.Add(this);
             }
+            ID = id;
         }
 
-        public PXEdge GetEdge(IPXVertex v1,IPXVertex v2)
+        public PXEdge GetEdge(IPXVertex v1, IPXVertex v2)
         {
             PXEdge edge = Edges.FindAll(e => e.Vertices.Contains(v1)).Find(e => e.Vertices.Contains(v2));
             if (edge == null)

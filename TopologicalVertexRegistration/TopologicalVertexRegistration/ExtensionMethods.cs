@@ -1,7 +1,6 @@
-﻿using PEPlugin.Pmx;
-using System;
+﻿using System;
 
-namespace SelectFaceIncludingVertex
+namespace TopologicalVertexRegistration
 {
     public static class ExtensionMethods
     {
@@ -48,11 +47,6 @@ namespace SelectFaceIncludingVertex
         public static string ToStringN(this object value, string name)
         {
             return name + " = " + value.ToStringL();
-        }
-
-        public static IPXVertex[] GetVertexArray(this IPXFace f)
-        {
-            return new IPXVertex[] { f.Vertex1, f.Vertex2, f.Vertex3 };
         }
     }
 }

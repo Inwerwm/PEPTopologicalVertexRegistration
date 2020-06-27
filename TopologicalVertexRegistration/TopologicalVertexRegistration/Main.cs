@@ -16,7 +16,7 @@ namespace TopologicalVertexRegistration
         {
             get
             {
-                return "位相幾何的位置合わせ";
+                return "プラグイン名";
             }
         }
 
@@ -32,7 +32,7 @@ namespace TopologicalVertexRegistration
         {
             get
             {
-                return "位相幾何的位置合わせ";
+                return "プラグイン説明";
             }
         }
 
@@ -41,7 +41,7 @@ namespace TopologicalVertexRegistration
             get
             {
                 // boot時実行, プラグインメニューへの登録, メニュー登録名
-                return new PEPluginOption(false, true, "位相幾何的位置合わせ");
+                return new PEPluginOption(false, true, "プラグイン名");
             }
         }
 

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
-            this.buttonGetStartSourcePoint = new System.Windows.Forms.Button();
             this.labelTitle = new System.Windows.Forms.Label();
             this.labelSource = new System.Windows.Forms.Label();
             this.labelTarget = new System.Windows.Forms.Label();
@@ -43,10 +42,11 @@
             this.textBoxTargetCorFaceID = new System.Windows.Forms.TextBox();
             this.labelGetFace = new System.Windows.Forms.Label();
             this.labelGetCorFace = new System.Windows.Forms.Label();
+            this.buttonGetStartSourcePoint = new System.Windows.Forms.Button();
+            this.textBoxStartSourcePointID1 = new System.Windows.Forms.TextBox();
             this.buttonRun = new System.Windows.Forms.Button();
             this.buttonGetStartTargetPoint = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBoxStartSourcePointID1 = new System.Windows.Forms.TextBox();
             this.textBoxStartSourcePointID2 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxStartTargetPointID1 = new System.Windows.Forms.TextBox();
@@ -102,18 +102,6 @@
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelMain.Size = new System.Drawing.Size(551, 556);
             this.tableLayoutPanelMain.TabIndex = 0;
-            // 
-            // buttonGetStartSourcePoint
-            // 
-            this.buttonGetStartSourcePoint.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGetStartSourcePoint.Location = new System.Drawing.Point(4, 344);
-            this.buttonGetStartSourcePoint.Name = "buttonGetStartSourcePoint";
-            this.buttonGetStartSourcePoint.Size = new System.Drawing.Size(268, 29);
-            this.buttonGetStartSourcePoint.TabIndex = 0;
-            this.buttonGetStartSourcePoint.Text = "探索開始辺頂点を取得";
-            this.buttonGetStartSourcePoint.UseVisualStyleBackColor = true;
             // 
             // labelTitle
             // 
@@ -194,6 +182,7 @@
             this.buttonGetTargetFace.TabIndex = 2;
             this.buttonGetTargetFace.Text = "選択面を取得";
             this.buttonGetTargetFace.UseVisualStyleBackColor = true;
+            this.buttonGetTargetFace.Click += new System.EventHandler(this.buttonGetTargetFace_Click);
             // 
             // buttonGetSourceFace
             // 
@@ -221,6 +210,7 @@
             this.buttonGetSourceCorFace.TabIndex = 2;
             this.buttonGetSourceCorFace.Text = "対応面を取得";
             this.buttonGetSourceCorFace.UseVisualStyleBackColor = true;
+            this.buttonGetSourceCorFace.Click += new System.EventHandler(this.buttonGetSourceCorFace_Click);
             // 
             // buttonGetTargetCorFace
             // 
@@ -234,6 +224,7 @@
             this.buttonGetTargetCorFace.TabIndex = 2;
             this.buttonGetTargetCorFace.Text = "対応面を取得";
             this.buttonGetTargetCorFace.UseVisualStyleBackColor = true;
+            this.buttonGetTargetCorFace.Click += new System.EventHandler(this.buttonGetTargetCorFace_Click);
             // 
             // textBoxSourceCorFaceID
             // 
@@ -283,6 +274,30 @@
             this.labelGetCorFace.Text = "対応させたい面を選択して取得させる\r\nそれぞれ一枚のみ 変形の起点となる";
             this.labelGetCorFace.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
+            // buttonGetStartSourcePoint
+            // 
+            this.buttonGetStartSourcePoint.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonGetStartSourcePoint.Location = new System.Drawing.Point(4, 344);
+            this.buttonGetStartSourcePoint.Name = "buttonGetStartSourcePoint";
+            this.buttonGetStartSourcePoint.Size = new System.Drawing.Size(268, 29);
+            this.buttonGetStartSourcePoint.TabIndex = 0;
+            this.buttonGetStartSourcePoint.Text = "探索開始辺頂点を取得";
+            this.buttonGetStartSourcePoint.UseVisualStyleBackColor = true;
+            this.buttonGetStartSourcePoint.Click += new System.EventHandler(this.buttonGetStartSourcePoint_Click);
+            // 
+            // textBoxStartSourcePointID1
+            // 
+            this.textBoxStartSourcePointID1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxStartSourcePointID1.Location = new System.Drawing.Point(0, 1);
+            this.textBoxStartSourcePointID1.Margin = new System.Windows.Forms.Padding(0);
+            this.textBoxStartSourcePointID1.Name = "textBoxStartSourcePointID1";
+            this.textBoxStartSourcePointID1.ReadOnly = true;
+            this.textBoxStartSourcePointID1.Size = new System.Drawing.Size(134, 27);
+            this.textBoxStartSourcePointID1.TabIndex = 3;
+            this.textBoxStartSourcePointID1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // buttonRun
             // 
             this.buttonRun.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -295,6 +310,7 @@
             this.buttonRun.TabIndex = 2;
             this.buttonRun.Text = "実行";
             this.buttonRun.UseVisualStyleBackColor = true;
+            this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
             // 
             // buttonGetStartTargetPoint
             // 
@@ -307,6 +323,7 @@
             this.buttonGetStartTargetPoint.TabIndex = 0;
             this.buttonGetStartTargetPoint.Text = "探索開始辺頂点を取得";
             this.buttonGetStartTargetPoint.UseVisualStyleBackColor = true;
+            this.buttonGetStartTargetPoint.Click += new System.EventHandler(this.buttonGetStartTargetPoint_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -324,17 +341,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(268, 29);
             this.tableLayoutPanel1.TabIndex = 5;
-            // 
-            // textBoxStartSourcePointID1
-            // 
-            this.textBoxStartSourcePointID1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxStartSourcePointID1.Location = new System.Drawing.Point(0, 1);
-            this.textBoxStartSourcePointID1.Margin = new System.Windows.Forms.Padding(0);
-            this.textBoxStartSourcePointID1.Name = "textBoxStartSourcePointID1";
-            this.textBoxStartSourcePointID1.ReadOnly = true;
-            this.textBoxStartSourcePointID1.Size = new System.Drawing.Size(134, 27);
-            this.textBoxStartSourcePointID1.TabIndex = 3;
-            this.textBoxStartSourcePointID1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxStartSourcePointID2
             // 
@@ -397,6 +403,7 @@
             this.buttonTest.TabIndex = 6;
             this.buttonTest.Text = "テスト";
             this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
             // CtrlForm
             // 
