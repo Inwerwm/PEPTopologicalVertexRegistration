@@ -145,8 +145,8 @@ namespace TopologicalVertexRegistration
 
             try
             {
-                var sourceTree = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex));
-                var targetTree = new FaceTree(TargetFaceIndices.Select(i => GetFace(i)), GetFace(TargetCorFaceIndex));
+                var sourceTree = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex), pmx.Vertex);
+                var targetTree = new FaceTree(TargetFaceIndices.Select(i => GetFace(i)), GetFace(TargetCorFaceIndex), pmx.Vertex);
 
                 RecursiveRegistration(
                     (sourceTree.Root, sourceTree.Root.GetEdge(pmx.Vertex[SourceStartEdgeVertex1Index], pmx.Vertex[SourceStartEdgeVertex2Index])),
@@ -162,7 +162,7 @@ namespace TopologicalVertexRegistration
             {
                 Utility.ShowException(ex);
             }
-
+            MessageBox.Show("完了しました。");
         }
 
         private void RecursiveRegistration((FaceNode node, PXEdge edge) source, (FaceNode node, PXEdge edge) target)
@@ -224,19 +224,25 @@ namespace TopologicalVertexRegistration
         private FaceTree st, tt;
         private void buttonTest_Click(object sender, EventArgs e)
         {
-            st = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex));
-
-            return;
-            if (st == null)
+            try
             {
-                st = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex));
-                tmpS = (st.Root, st.Root.GetEdge(pmx.Vertex[SourceStartEdgeVertex1Index], pmx.Vertex[SourceStartEdgeVertex2Index]));
+                if (st == null)
+                {
+                    st = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex));
+                    tmpS = (st.Root, st.Root.GetEdge(pmx.Vertex[SourceStartEdgeVertex1Index], pmx.Vertex[SourceStartEdgeVertex2Index]));
+                }
+                if (tt == null)
+                {
+                    tt = new FaceTree(TargetFaceIndices.Select(i => GetFace(i)), GetFace(TargetCorFaceIndex));
+                    tmpT = (tt.Root, tt.Root.GetEdge(pmx.Vertex[TargetStartEdgeVertex1Index], pmx.Vertex[TargetStartEdgeVertex2Index]));
+                    MessageBox.Show($"{st.Surplus}, {tt.Surplus}");
+                }
             }
-            if (tt == null)
+            catch (Exception ex)
             {
-                tt = new FaceTree(TargetFaceIndices.Select(i => GetFace(i)), GetFace(TargetCorFaceIndex));
-                tmpT = (tt.Root, tt.Root.GetEdge(pmx.Vertex[TargetStartEdgeVertex1Index], pmx.Vertex[TargetStartEdgeVertex2Index]));
-                MessageBox.Show($"{st.Surplus}, {tt.Surplus}");
+                Utility.ShowException(ex);
+                st = null;
+                tt = null;
             }
 
             (tmpS, tmpT) = ManualRCRegistration(tmpS, tmpT);

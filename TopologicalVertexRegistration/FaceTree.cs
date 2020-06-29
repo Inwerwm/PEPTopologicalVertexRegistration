@@ -18,8 +18,20 @@ namespace TopologicalVertexRegistration
             if (!faces.Contains(root))
                 throw new ArgumentException("root面はfaces内に存在していなければなりません。");
 
-            FaceNodes = faces.Select((f, i) => new FaceNode(f, i)).ToList();
-            Root = new FaceNode(root);
+            FaceNodes = faces.Where(f => f != root).Select((f, i) => new FaceNode(f, i)).ToList();
+            Root = new FaceNode(root, -1);
+
+            SetNeighborRecurcive(Root, null);
+            FlagReset();
+        }
+
+        public FaceTree(IEnumerable<IPXFace> faces, IPXFace root, IList<IPXVertex> vertices)
+        {
+            if (!faces.Contains(root))
+                throw new ArgumentException("root面はfaces内に存在していなければなりません。");
+
+            FaceNodes = faces.Where(f => f != root).Select((f, i) => new FaceNode(f, i, vertices)).ToList();
+            Root = new FaceNode(root, -1, vertices);
 
             SetNeighborRecurcive(Root, null);
             FlagReset();
@@ -60,7 +72,8 @@ namespace TopologicalVertexRegistration
             node.Flag = false;
             foreach (var n in node.Neighbor)
             {
-                FlagResetRecurcive(n);
+                if (n.Flag)
+                    FlagResetRecurcive(n);
             }
         }
     }
@@ -76,6 +89,7 @@ namespace TopologicalVertexRegistration
         public List<FaceNode> Neighbor { get; set; } = new List<FaceNode>();
 
         public int ID { get; set; }
+        public string Name { get; }
 
         public FaceNode(IPXFace face, int id = -1)
         {
@@ -86,6 +100,18 @@ namespace TopologicalVertexRegistration
                 e.Nodes.Add(this);
             }
             ID = id;
+        }
+
+        public FaceNode(IPXFace face, int id, IList<IPXVertex> vs)
+        {
+            Face = face;
+            Edges = new List<PXEdge>(PXEdge.FromFace(Face, id, vs.IndexOf(face.Vertex1), vs.IndexOf(face.Vertex2), vs.IndexOf(face.Vertex3)));
+            foreach (PXEdge e in Edges)
+            {
+                e.Nodes.Add(this);
+            }
+            ID = id;
+            Name = $"{ID}_{vs.IndexOf(face.Vertex1)}-{vs.IndexOf(face.Vertex2)}-{vs.IndexOf(face.Vertex3)}";
         }
 
         public PXEdge GetEdge(IPXVertex v1, IPXVertex v2)
@@ -116,6 +142,8 @@ namespace TopologicalVertexRegistration
         public List<FaceNode> Nodes { get; } = new List<FaceNode>();
         public List<IPXFace> Faces { get => Nodes.Select(n => n.Face).ToList(); }
 
+        public string Name { get; set; }
+
         public bool Flag { get; set; } = false;
 
         public PXEdge(IPXVertex vertex1, IPXVertex vertex2)
@@ -127,7 +155,16 @@ namespace TopologicalVertexRegistration
 
         public static List<PXEdge> FromFace(IPXFace f) => new List<PXEdge> { new PXEdge(f.Vertex1, f.Vertex2), new PXEdge(f.Vertex2, f.Vertex3), new PXEdge(f.Vertex3, f.Vertex1) };
 
-        public bool Equals(PXEdge other) => Vertex1 == other.Vertex1 && Vertex2 == other.Vertex2;
+        public static List<PXEdge> FromFace(IPXFace f, int faceID, int vID1, int vID2, int vID3)
+        {
+            var es = FromFace(f);
+            es[0].Name = $"{faceID}_{vID1}-{vID2}";
+            es[1].Name = $"{faceID}_{vID2}-{vID3}";
+            es[2].Name = $"{faceID}_{vID3}-{vID1}";
+            return es;
+        }
+
+        public bool Equals(PXEdge other) => Vertices.Contains(other.Vertex1) && Vertices.Contains(other.Vertex2);
         public override bool Equals(object obj) => obj is PXEdge edge && Equals(edge);
 
         public override int GetHashCode()
