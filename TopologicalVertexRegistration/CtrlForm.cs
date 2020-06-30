@@ -127,6 +127,40 @@ namespace TopologicalVertexRegistration
             textBoxTargetCorFaceID.Text = TargetCorFaceIndex.ToString();
         }
 
+        private void buttonGetStartSourcePoint_Click(object sender, EventArgs e)
+        {
+            pmx = PXCBridge.GetCurrentPmx(args.Connector);
+            var selectedVertexIndices = args.Connector.GetSelectedVertexIndices();
+            if (selectedVertexIndices.Length != 2)
+            {
+                MessageBox.Show("辺をなす2点を選択してください");
+                return;
+            }
+
+            SourceStartEdgeVertex1Index = selectedVertexIndices[0];
+            SourceStartEdgeVertex2Index = selectedVertexIndices[1];
+
+            textBoxStartSourcePointID1.Text = SourceStartEdgeVertex1Index.ToString();
+            textBoxStartSourcePointID2.Text = SourceStartEdgeVertex2Index.ToString();
+        }
+
+        private void buttonGetStartTargetPoint_Click(object sender, EventArgs e)
+        {
+            pmx = PXCBridge.GetCurrentPmx(args.Connector);
+            var selectedVertexIndices = args.Connector.GetSelectedVertexIndices();
+            if (selectedVertexIndices.Length != 2)
+            {
+                MessageBox.Show("辺をなす2点を選択してください");
+                return;
+            }
+
+            TargetStartEdgeVertex1Index = selectedVertexIndices[0];
+            TargetStartEdgeVertex2Index = selectedVertexIndices[1];
+
+            textBoxStartTargetPointID1.Text = TargetStartEdgeVertex1Index.ToString();
+            textBoxStartTargetPointID2.Text = TargetStartEdgeVertex2Index.ToString();
+        }
+
         private void buttonRun_Click(object sender, EventArgs e)
         {
             if (SourceFaceIndices.Length < 1 || TargetFaceIndices.Length < 1)
@@ -184,104 +218,6 @@ namespace TopologicalVertexRegistration
                     RecursiveRegistration((nextNode.source, nextEdge.source), (nextNode.target, nextEdge.target));
                 }
             }
-        }
-
-        private void buttonGetStartSourcePoint_Click(object sender, EventArgs e)
-        {
-            pmx = PXCBridge.GetCurrentPmx(args.Connector);
-            var selectedVertexIndices = args.Connector.GetSelectedVertexIndices();
-            if (selectedVertexIndices.Length != 2)
-            {
-                MessageBox.Show("辺をなす2点を選択してください");
-                return;
-            }
-
-            SourceStartEdgeVertex1Index = selectedVertexIndices[0];
-            SourceStartEdgeVertex2Index = selectedVertexIndices[1];
-
-            textBoxStartSourcePointID1.Text = SourceStartEdgeVertex1Index.ToString();
-            textBoxStartSourcePointID2.Text = SourceStartEdgeVertex2Index.ToString();
-        }
-
-        private void buttonGetStartTargetPoint_Click(object sender, EventArgs e)
-        {
-            pmx = PXCBridge.GetCurrentPmx(args.Connector);
-            var selectedVertexIndices = args.Connector.GetSelectedVertexIndices();
-            if (selectedVertexIndices.Length != 2)
-            {
-                MessageBox.Show("辺をなす2点を選択してください");
-                return;
-            }
-
-            TargetStartEdgeVertex1Index = selectedVertexIndices[0];
-            TargetStartEdgeVertex2Index = selectedVertexIndices[1];
-
-            textBoxStartTargetPointID1.Text = TargetStartEdgeVertex1Index.ToString();
-            textBoxStartTargetPointID2.Text = TargetStartEdgeVertex2Index.ToString();
-        }
-
-        private (FaceNode node, PXEdge edge) tmpS, tmpT;
-        private FaceTree st, tt;
-        private void buttonTest_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (st == null)
-                {
-                    st = new FaceTree(SourceFaceIndices.Select(i => GetFace(i)), GetFace(SourceCorFaceIndex));
-                    tmpS = (st.Root, st.Root.GetEdge(pmx.Vertex[SourceStartEdgeVertex1Index], pmx.Vertex[SourceStartEdgeVertex2Index]));
-                }
-                if (tt == null)
-                {
-                    tt = new FaceTree(TargetFaceIndices.Select(i => GetFace(i)), GetFace(TargetCorFaceIndex));
-                    tmpT = (tt.Root, tt.Root.GetEdge(pmx.Vertex[TargetStartEdgeVertex1Index], pmx.Vertex[TargetStartEdgeVertex2Index]));
-                    MessageBox.Show($"{st.Surplus}, {tt.Surplus}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Utility.ShowException(ex);
-                st = null;
-                tt = null;
-            }
-
-            (tmpS, tmpT) = ManualRCRegistration(tmpS, tmpT);
-
-            var selL = new List<int>();
-            if (tmpS.edge != null)
-                selL.AddRange(tmpS.edge.Vertices.Select(v => pmx.Vertex.IndexOf(v)));
-            if (tmpT.edge != null)
-                selL.AddRange(tmpT.edge.Vertices.Select(v => pmx.Vertex.IndexOf(v)));
-            args.Connector.SetSelectedVertexIndices(selL.ToArray());
-
-            if (selL.Count == 0)
-            {
-                MessageBox.Show("nullに到達しました。一時変数をリセットします。");
-                st = null;
-                tt = null;
-            }
-        }
-
-        private ((FaceNode node, PXEdge edge), (FaceNode node, PXEdge edge)) ManualRCRegistration((FaceNode node, PXEdge edge) source, (FaceNode node, PXEdge edge) target)
-        {
-            source.edge.Vertex1.Position = target.edge.Vertex1.Position;
-            source.edge.Vertex2.Position = target.edge.Vertex2.Position;
-
-            source.edge.Flag = target.edge.Flag = true;
-            if (source.node == null || target.node == null)
-                return ((null, null), (null, null));
-
-            (int source, int target) edgeID = (source.node.Edges.IndexOf(source.edge), target.node.Edges.IndexOf(target.edge));
-            for (int i = 1; i < 3; i++)
-            {
-                (PXEdge source, PXEdge target) nextEdge = (source.node.Edges[(edgeID.source + i) % 3], target.node.Edges[(edgeID.target + i) % 3]);
-                if (!nextEdge.source.Flag && !nextEdge.target.Flag)
-                {
-                    (FaceNode source, FaceNode target) nextNode = (nextEdge.source.Nodes.Find(n => n != source.node), nextEdge.target.Nodes.Find(n => n != target.node));
-                    return ((nextNode.source, nextEdge.source), (nextNode.target, nextEdge.target));
-                }
-            }
-            return ((null, null), (null, null));
         }
     }
 }

@@ -30,7 +30,7 @@ namespace TopologicalVertexRegistration
     {
         public override string Name
         {
-            get { return "位相幾何的頂点位置合わせ"; }
+            get { return "辺伝い面位置合わせ"; }
         }
 
         public override string Version
@@ -40,12 +40,12 @@ namespace TopologicalVertexRegistration
 
         public override string Description
         {
-            get { return "頂点を面の構成から同定し位置合わせする"; }
+            get { return "頂点を面の構成に基づいて位置合わせする"; }
         }
 
         public override string MenuText
         {
-            get { return "位相幾何的頂点位置合わせ"; }
+            get { return "辺伝い面位置合わせ"; }
         }
 
         private CtrlForm ctrlForm = null;
